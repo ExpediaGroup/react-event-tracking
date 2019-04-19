@@ -1,0 +1,32 @@
+body {
+    margin: 24px;
+}
+
+* + h1,
+* + h2 {
+    margin-top: 40px;
+}
+
+.harness-base {
+    width: 100%;
+    max-width: 820px;
+    margin: 20px auto;
+    padding: 20px;
+    position: relative;
+}
+
+.harness-dl {
+    display: grid;
+    grid-template-columns: max-content auto;
+}
+
+.harness-dt {
+    grid-column-start: 1;
+    margin-bottom: 8px;
+}
+
+.harness-dd {
+    grid-column-start: 2;
+    line-height: 28px;
+    vertical-align: bottom;
+}
