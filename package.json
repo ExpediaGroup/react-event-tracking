@@ -1,6 +1,6 @@
 {
   "name": "@vrbo/react-event-tracking",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React shared context utilities for analytic event tracking.",
   "license": "Apache-2.0",
   "author": {
