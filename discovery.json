@@ -1,0 +1,46 @@
+{
+    "config": {
+        "slack": "ui-toolkit-support"
+    },
+    "docs": [
+        {
+            "componentName": "TrackingContext",
+            "doc": "markdown/TrackingContext.md",
+            "experience": "GX",
+            "isDefaultExport": false,
+            "name": "TrackingContext",
+            "order": "atom",
+            "src": "src/context/TrackingContext.js",
+            "type": "module",
+            "family": "webComponent",
+            "category": "testAndLearn",
+            "subCategory": "eventTracking"
+        },
+        {
+            "componentName": "TrackingProvider",
+            "doc": "markdown/TrackingProvider.md",
+            "experience": "GX",
+            "isDefaultExport": false,
+            "name": "TrackingProvider",
+            "order": "atom",
+            "src": "src/components/TrackingProvider/TrackingProvider.js",
+            "type": "module",
+            "family": "webComponent",
+            "category": "testAndLearn",
+            "subCategory": "eventTracking"
+        },
+        {
+            "componentName": "TrackingTrigger",
+            "doc": "markdown/TrackingTrigger.md",
+            "experience": "GX",
+            "isDefaultExport": false,
+            "name": "TrackingTrigger",
+            "order": "atom",
+            "src": "src/components/TrackingTrigger/TrackingTrigger.js",
+            "type": "module",
+            "family": "webComponent",
+            "category": "testAndLearn",
+            "subCategory": "eventTracking"
+        }
+    ]
+}
