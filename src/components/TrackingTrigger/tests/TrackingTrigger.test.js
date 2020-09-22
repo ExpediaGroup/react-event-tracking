@@ -37,21 +37,21 @@ describe('<TrackingTrigger/>', () => {
             expect(triggerSpy.calledWith(event)).to.equal(true);
         });
 
-        it('should trigger the specified event, fields and options', () => {
+        it('should trigger the specified event, analytics and options', () => {
             const event = 'use.force';
-            const fields = {
+            const analytics = {
                 luke: 'yes',
                 padme: 'no'
             };
             const options = {
                 darkside: 'no'
             };
-            const trigger = shallow(<TrackingTrigger event={event} fields={fields} options={options}/>).instance();
+            const trigger = shallow(<TrackingTrigger event={event} analytics={analytics} options={options}/>).instance();
             const triggerSpy = sinon.spy();
             trigger.trigger = triggerSpy;
             trigger.componentDidMount();
             expect(triggerSpy.called).to.equal(true);
-            expect(triggerSpy.calledWith(event, fields, options)).to.equal(true);
+            expect(triggerSpy.calledWith(event, analytics, options)).to.equal(true);
         });
 
         it('should call the onTrigger callback with the specified event', () => {
@@ -66,9 +66,9 @@ describe('<TrackingTrigger/>', () => {
             expect(triggerSpy.calledWith({event})).to.equal(true);
         });
 
-        it('should call the onTrigger callback with the specified event, fields and options', () => {
+        it('should call the onTrigger callback with the specified event, analytics and options', () => {
             const event = 'use.force';
-            const fields = {
+            const analytics = {
                 luke: 'yes',
                 padme: 'no'
             };
@@ -76,17 +76,17 @@ describe('<TrackingTrigger/>', () => {
                 darkside: 'no'
             };
             const triggerSpy = sinon.spy();
-            const trigger = shallow(<TrackingTrigger event={event} fields={fields} options={options} onTrigger={triggerSpy}/>).instance();
+            const trigger = shallow(<TrackingTrigger event={event} analytics={analytics} options={options} onTrigger={triggerSpy}/>).instance();
             trigger.trigger = () => {
                 return {
                     event,
-                    fields,
+                    analytics,
                     options
                 };
             };
             trigger.componentDidMount();
             expect(triggerSpy.called).to.equal(true);
-            expect(triggerSpy.calledWith({event, fields, options})).to.equal(true);
+            expect(triggerSpy.calledWith({event, analytics, options})).to.equal(true);
         });
     });
 

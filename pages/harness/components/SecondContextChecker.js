@@ -20,7 +20,7 @@ import './SecondContextChecker.less';
 
 class SecondContextChecker extends PureComponent {
     static propTypes = {
-        /** Object of string values that represents the default fields to apply to all events within this context. */
+        /** Object of string values that represents the default analytics to apply to all events within this context. */
         expected: PropTypes.object
     };
 

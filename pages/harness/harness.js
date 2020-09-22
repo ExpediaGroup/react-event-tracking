@@ -23,7 +23,7 @@ import SecondContextChecker from './components/SecondContextChecker';
 import './harness.less';
 
 const SECONDCONTEXT = {
-    myFields: 'true',
+    myAnalytics: 'true',
     otherStuff: 'false'
 };
 
@@ -63,22 +63,22 @@ function harness() {
             </dl>
             <h1>{'TrackingProvider and TrackingContext contextType'}</h1>
             <p>{'All these events have been setup to trigger on mount but can be manually triggered by clicking the related button.'}</p>
-            <h2>{'Provider with no fields or options.'}</h2>
+            <h2>{'Provider with no analytics or options.'}</h2>
             <TrackingChecker expected={{
                 event: 'generic.click',
-                fields: {},
+                analytics: {},
                 options: {}}}
             >
                 <EventButton label={'Generate generic.click'} />
             </TrackingChecker>
 
-            <h2>{'Provider with fields and no options.'}</h2>
-            <TrackingChecker fields={{
+            <h2>{'Provider with analytics and no options.'}</h2>
+            <TrackingChecker analytics={{
                 'actionlocation': 'left',
                 'eventcategory': 'harness'
             }} expected={{
                 event: 'generic.click',
-                fields: {
+                analytics: {
                     actionlocation: 'left',
                     eventcategory: 'harness'
                 },
@@ -87,13 +87,13 @@ function harness() {
                 <EventButton label={'Generate generic.click'} />
             </TrackingChecker>
 
-            <h2>{'Nested Provider with fields and no options.'}</h2>
-            <TrackingProvider fields={{'actionlocation': 'top'}}>
+            <h2>{'Nested Provider with analytics and no options.'}</h2>
+            <TrackingProvider analytics={{'actionlocation': 'top'}}>
                 <TrackingChecker
-                    fields={{'eventcategory': 'harness'}}
+                    analytics={{'eventcategory': 'harness'}}
                     expected={{
                         event: 'generic.click',
-                        fields: {
+                        analytics: {
                             actionlocation: 'top',
                             eventcategory: 'harness'
                         },
@@ -104,17 +104,17 @@ function harness() {
             </TrackingProvider>
 
             <h2>{'Nested Provider with field overrides and no options.'}</h2>
-            <TrackingProvider fields={{
+            <TrackingProvider analytics={{
                 'actionlocation': 'left',
                 'eventcategory': 'junk'}}
             >
                 <TrackingChecker
-                    fields={{
+                    analytics={{
                         'actionlocation': 'top',
                         'eventcategory': 'harness'}}
                     expected={{
                         event: 'generic.click',
-                        fields: {
+                        analytics: {
                             actionlocation: 'top',
                             eventcategory: 'harness'
                         },
@@ -124,12 +124,12 @@ function harness() {
                 </TrackingChecker>
             </TrackingProvider>
 
-            <h2>{'Provider with fields and eventFields with no options.'}</h2>
+            <h2>{'Provider with analytics and eventAnalytics with no options.'}</h2>
             <TrackingChecker
-                fields={{
+                analytics={{
                     'actionlocation': 'left',
                     'eventcategory': 'harness'
-                }} eventFields={{
+                }} eventAnalytics={{
                     'generic.click': {
                         'eventlabel': 'custom'
                     },
@@ -139,7 +139,7 @@ function harness() {
                 }}
                 expected={{
                     event: 'generic.click',
-                    fields: {
+                    analytics: {
                         actionlocation: 'left',
                         eventcategory: 'harness',
                         eventlabel: 'custom'
@@ -149,13 +149,13 @@ function harness() {
                 <EventButton label={'Generate generic.click'}/>
             </TrackingChecker>
 
-            <h2>{'Nested Provider with fields and eventFields with no options.'}</h2>
+            <h2>{'Nested Provider with analytics and eventAnalytics with no options.'}</h2>
             <TrackingProvider
-                fields={{
+                analytics={{
                     'actionlocation': 'left',
                     'eventcategory': 'harness',
                     'eventvalue': 'a value'
-                }} eventFields={{
+                }} eventAnalytics={{
                     'generic.click': {
                         'eventlabel': 'skip',
                         'highfrequency': 'false'
@@ -166,18 +166,18 @@ function harness() {
                 }}
             >
                 <TrackingChecker
-                    fields={{
+                    analytics={{
                         'actionlocation': 'top',
                         'eventcategory': 'test'
                     }}
-                    eventFields={{
+                    eventAnalytics={{
                         'generic.click': {
                             'eventlabel': 'custom'
                         }
                     }}
                     expected={{
                         event: 'generic.click',
-                        fields: {
+                        analytics: {
                             actionlocation: 'top',
                             eventcategory: 'test',
                             eventvalue: 'a value',
@@ -190,12 +190,12 @@ function harness() {
                 </TrackingChecker>
             </TrackingProvider>
 
-            <h2>{'Nested Provider with fields, eventFields, options and eventOptions.'}</h2>
-            <TrackingProvider fields={{
+            <h2>{'Nested Provider with analytics, eventAnalytics, options and eventOptions.'}</h2>
+            <TrackingProvider analytics={{
                 'actionlocation': 'left',
                 'eventcategory': 'harness',
                 'eventvalue': 'a value'
-            }} eventFields={{
+            }} eventAnalytics={{
                 'generic.click': {
                     'eventlabel': 'skip',
                     'highfrequency': 'false'
@@ -212,11 +212,11 @@ function harness() {
             }}
             >
                 <TrackingChecker
-                    fields={{
+                    analytics={{
                         'actionlocation': 'top',
                         'eventcategory': 'test'
                     }}
-                    eventFields={{
+                    eventAnalytics={{
                         'generic.click': {
                             'eventlabel': 'custom'
                         }
@@ -231,7 +231,7 @@ function harness() {
                     }}
                     expected={{
                         event: 'generic.click',
-                        fields: {
+                        analytics: {
                             actionlocation: 'top',
                             eventcategory: 'test',
                             eventvalue: 'a value',
@@ -249,13 +249,13 @@ function harness() {
 
             <h2>{'Provider with component consuming multiple contexts with one of them being contextType.'}</h2>
             <TrackingChecker
-                fields={{
+                analytics={{
                     'actionlocation': 'left',
                     'eventcategory': 'harness'
                 }}
                 expected={{
                     event: 'generic.click',
-                    fields: {
+                    analytics: {
                         actionlocation: 'left',
                         eventcategory: 'harness'
                     },
@@ -271,22 +271,22 @@ function harness() {
 
             <h1>{'TrackingTrigger'}</h1>
 
-            <h2>{'Trigger with no fields or options.'}</h2>
+            <h2>{'Trigger with no analytics or options.'}</h2>
             <TrackingChecker
                 expected={{
                     event: 'generic.click',
-                    fields: {},
+                    analytics: {},
                     options: {}}}
             >
                 <TrackingTrigger event={'generic.click'}/>
                 <span>{'generic.click'}</span>
             </TrackingChecker>
 
-            <h2>{'Trigger with fields and options for TrackingTrigger.'}</h2>
+            <h2>{'Trigger with analytics and options for TrackingTrigger.'}</h2>
             <TrackingChecker
                 expected={{
                     event: 'generic.click',
-                    fields: {
+                    analytics: {
                         'actionlocation': 'top',
                         'eventcategory': 'test'
                     },
@@ -295,7 +295,7 @@ function harness() {
                     }}}
             >
                 <TrackingTrigger event={'generic.click'}
-                    fields={{
+                    analytics={{
                         'actionlocation': 'top',
                         'eventcategory': 'test'
                     }}
@@ -306,14 +306,14 @@ function harness() {
                 <span>{'generic.click'}</span>
             </TrackingChecker>
 
-            <h2>{'Trigger with fields and options for TrackingTrigger and TrackingProvider with fields and options.'}</h2>
+            <h2>{'Trigger with analytics and options for TrackingTrigger and TrackingProvider with analytics and options.'}</h2>
             <TrackingChecker
-                fields={{
+                analytics={{
                     'actionlocation': 'left',
                     'eventcategory': 'harness',
                     'eventvalue': 'a value'
                 }}
-                eventFields={{
+                eventAnalytics={{
                     'generic.click': {
                         'eventlabel': 'skip',
                         'highfrequency': 'false'
@@ -333,7 +333,7 @@ function harness() {
                 }}
                 expected={{
                     event: 'generic.click',
-                    fields: {
+                    analytics: {
                         'actionlocation': 'top',
                         'eventcategory': 'test',
                         'eventvalue': 'a value',
@@ -346,7 +346,7 @@ function harness() {
                     }}}
             >
                 <TrackingTrigger event={'generic.click'}
-                    fields={{
+                    analytics={{
                         'actionlocation': 'top',
                         'eventcategory': 'test'
                     }}
@@ -359,7 +359,7 @@ function harness() {
 
             <h2>{'Trigger with no provider should not cause hard failure.'}</h2>
             <TrackingTrigger event={'generic.click'}
-                fields={{
+                analytics={{
                     'actionlocation': 'top',
                     'eventcategory': 'test'
                 }}

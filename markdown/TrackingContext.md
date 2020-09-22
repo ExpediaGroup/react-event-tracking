@@ -1,10 +1,10 @@
-`TrackingContext` provides acccess to the current value of the context defined by a `TrackingProvider`. Use of `TrackingProvider` and `TrackingContext` enables an application to progressively build the fields and options and then trigger events at the lowest level.
+`TrackingContext` provides acccess to the current value of the context defined by a `TrackingProvider`. Use of `TrackingProvider` and `TrackingContext` enables an application to progressively build the analytics and options and then trigger events at the lowest level.
 
 ## Base Usage
 
 Structuring a component to use `TrackingContext` will provide access to the `trigger` method to trigger events. Use one of the two methods shown below to configure the context for a React component. Once configured as shown, the component can then access the `trigger` method via `this.context.trigger`.
 
-If the babel configuration for the application includes support for [public class fields syntax](https://babeljs.io/docs/plugins/transform-class-properties/) and the application is using **react ^16.6.0**, use a *static* class field to initialize the `contextType`:
+If the babel configuration for the application includes support for [public class analytics syntax](https://babeljs.io/docs/plugins/transform-class-properties/) and the application is using **react ^16.6.0**, use a *static* class field to initialize the `contextType`:
 
 ```jsx
 import React, {Component} from 'react';
@@ -20,7 +20,7 @@ class MyComponent extends Component {
 }
 ```
 
-Alternatively, if a component is not using public class fields syntax, set the `contextType` directly on the class:
+Alternatively, if a component is not using public class analytics syntax, set the `contextType` directly on the class:
 
 ```jsx
 import React, {Component} from 'react';
@@ -37,18 +37,18 @@ MyComponent.contextType = TrackingContext;
 
 ## Trigger API
 
-The `trigger` method is used to log an event with the framework. In combination with the `TrackingProvider` component, this enables an application to build the event fields and options throughout the DOM hierarchy and then trigger the event at the lowest level. Using this framework helps to ensure consistency in events as the lower level components can trigger the event generically while inheriting the fields and options defined higher in the DOM hierarchy through `TrackingProvider`.
+The `trigger` method is used to log an event with the framework. In combination with the `TrackingProvider` component, this enables an application to build the event analytics and options throughout the DOM hierarchy and then trigger the event at the lowest level. Using this framework helps to ensure consistency in events as the lower level components can trigger the event generically while inheriting the analytics and options defined higher in the DOM hierarchy through `TrackingProvider`.
 
 The `trigger` API has the following signature:
 
 ```javascript
-trigger(event, fields, options)
+trigger(event, analytics, options)
 ```
 
 Where:
 
 - **event** - The name of the event to trigger (String).
-- **fields** - The required and optional fields for the event (Object of string values).
+- **analytics** - The required and optional analytics for the event (Object of string values).
 - **options** - Options for the trigger API to use when triggering the event. (Object)
 
 ## Determine if provider exists

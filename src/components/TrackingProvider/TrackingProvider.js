@@ -20,18 +20,18 @@ import TrackingContext from '../../context/TrackingContext';
 /**
  * A React context provider that allows nesting to generate new context that
  * builds on parent context. This component allows applications to build the
- * fields and options for events declaratively and through nesting.
+ * analytics and options for events declaratively and through nesting.
  */
 class TrackingProvider extends PureComponent {
     static propTypes = {
-        /** An object of event specific fields where the event name is the key and the value is an object of field key/value pairs for the event. Event specific values will be merged with defaults from the `fields` property. */
-        eventFields: PropTypes.objectOf(PropTypes.objectOf(PropTypes.string)),
+        /** An object of event specific analytics where the event name is the key and the value is an object of field key/value pairs for the event. Event specific values will be merged with defaults from the `analytics` property. */
+        eventAnalytics: PropTypes.objectOf(PropTypes.objectOf(PropTypes.any)),
         /** An object of event specific options where the event name is the key and the value is an object of option key/value pairs for the event. Event specific values will be merged with defaults from the `options` property. */
-        eventOptions: PropTypes.objectOf(PropTypes.objectOf(PropTypes.string)),
-        /** Object of string values that represents the default fields to apply to all events within this context. */
-        fields: PropTypes.objectOf(PropTypes.string),
+        eventOptions: PropTypes.objectOf(PropTypes.objectOf(PropTypes.any)),
+        /** Object of string values that represents the default analytics to apply to all events within this context. */
+        analytics: PropTypes.objectOf(PropTypes.any),
         /** The trigger options. */
-        options: PropTypes.objectOf(PropTypes.string),
+        options: PropTypes.objectOf(PropTypes.any),
         /** When true, overwrites the current context with specified properties. Default is to merge instead of overwrite. */
         overwrite: PropTypes.bool,
         /** Tracking event trigger implementation. */
@@ -50,9 +50,9 @@ class TrackingProvider extends PureComponent {
         // structure must mimic the one defined in TrackingContext;
         this.TrackingContext = {
             _data: {
-                eventFields: this.props.eventFields,
+                eventAnalytics: this.props.eventAnalytics,
                 eventOptions: this.props.eventOptions,
-                fields: this.props.fields,
+                analytics: this.props.analytics,
                 options: this.props.options,
                 trigger: this.props.trigger || (/* istanbul ignore next */() => {})
             },
@@ -66,28 +66,28 @@ class TrackingProvider extends PureComponent {
      *
      * @param {Object} data
      */
-    mergeContextData(data = {eventFields: {}, eventOptions: {}}) {
-        const {eventFields, eventOptions, fields, options, overwrite} = this.props;
+    mergeContextData(data = {eventAnalytics: {}, eventOptions: {}}) {
+        const {eventAnalytics, eventOptions, analytics, options, overwrite} = this.props;
         const newData = {};
 
         if (overwrite) {
-            newData.eventFields = eventFields || data.eventFields;
+            newData.eventAnalytics = eventAnalytics || data.eventAnalytics;
             newData.eventOptions = eventOptions || data.eventOptions;
-            newData.fields = fields || data.fields;
+            newData.analytics = analytics || data.analytics;
             newData.options = options || data.options;
         } else {
             // Not an overwrite so merge the properties and context objects
-            newData.eventFields = {...data.eventFields, ...eventFields};
+            newData.eventAnalytics = {...data.eventAnalytics, ...eventAnalytics};
             newData.eventOptions = {...data.eventOptions, ...eventOptions};
-            newData.fields = {...data.fields, ...fields};
+            newData.analytics = {...data.analytics, ...analytics};
             newData.options = {...data.options, ...options};
 
-            // if eventFields or eventOptions was specified need to do a shallow
+            // if eventAnalytics or eventOptions was specified need to do a shallow
             // copy and another shallow copy one level deep for each key.
 
-            if (eventFields) {
-                Object.keys(newData.eventFields).forEach((key) => {
-                    newData.eventFields[key] = {...data.eventFields[key], ...eventFields[key]};
+            if (eventAnalytics) {
+                Object.keys(newData.eventAnalytics).forEach((key) => {
+                    newData.eventAnalytics[key] = {...data.eventAnalytics[key], ...eventAnalytics[key]};
                 });
             }
             if (eventOptions) {
@@ -105,27 +105,27 @@ class TrackingProvider extends PureComponent {
      * values in context and then invokes the implementation specific trigger
      * method.
      */
-    trigger = (event, fields = {}, options = {}) => {
+    trigger = (event, analytics = {}, options = {}) => {
         const data = this.TrackingContext._data;
         const name = event || data.event;
-        const eventFields = data.eventFields ? data.eventFields[name] : {};
+        const eventAnalytics = data.eventAnalytics ? data.eventAnalytics[name] : {};
         const eventOptions = data.eventOptions ? data.eventOptions[name] : {};
 
         if (!name) {
             throw new TypeError('event is a required parameter');
         }
 
-        fields = {
-            ...data.fields,
-            ...eventFields,
-            ...fields
+        analytics = {
+            ...data.analytics,
+            ...eventAnalytics,
+            ...analytics
         };
         options = {
             ...data.options,
             ...eventOptions,
             ...options
         };
-        return data.trigger(name, fields, options);
+        return data.trigger(name, analytics, options);
     }
 
     /**
