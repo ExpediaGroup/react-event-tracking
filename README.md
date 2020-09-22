@@ -49,8 +49,10 @@ The `TrackingProvider` is a [React 16 context provider](https://reactjs.org/docs
 | PROPERTY       | TYPE                | DEFAULT  | DESCRIPTION |
 | -------------- | ------------------- | -------- | ----------- |
 | eventPayload   | objectOf (objectOf) | ──       | An object of event specific payload where the event name is the key and the value is an object of field key/value pairs for the event. Event specific values will be merged with defaults from the `payload` property. |
+| eventFields    | objectOf (objectOf) | ──       | (Deprecated) An object of event specific fields where the event name is the key and the value is an object of field key/value pairs for the event. Event specific values will be merged with defaults from the `fields` property. |
 | eventOptions   | objectOf (objectOf) | ──       | An object of event specific options where the event name is the key and the value is an object of option key/value pairs for the event. Event specific values will be merged with defaults from the `options` property. |
 | payload        | objectOf (any)      | ──       | Object of any values that represents the default payload to apply to all events within this context. |
+| fields         | objectOf (string)   | ──       | (Deprecated) Object of string values that represents the default fields to apply to all events within this context. |
 | options        | objectOf (any)      | ──       | The trigger options. |
 | overwrite      | bool                | false    | When true, overwrites the current context with specified properties. Default is to merge instead of overwrite. |
 | trigger        | func                | () => {} | Tracking event trigger implementation. |
@@ -155,6 +157,7 @@ For further details on usage of the `TrackingTrigger` component view the [compon
 * Prior to React 16.8.0 it was not possible for a component to use multiple `contextType` definitions. If a component needs to consume multiple `contextType` definitions, use the [hooks api](https://reactjs.org/docs/hooks-overview.html#other-hooks) made available in React 16.8.0.
 * If a `TrackingProvider` with a `trigger` implementation is not defined somewhere in the hierarchy, the `this.context.trigger` API will essentially be a no-op. This allows components to be enabled to trigger events regardless of whether the application is configured to trigger them.
 * Do not dynamically construct the property values for `TrackingProvider` unless you want all descendant consumers to force re-render. See the "Note" under the `TrackingProvider` section for more details.
+* Objects used in `eventPayload` and `eventOptions` are shallow copied, so changes to referenced objects would be reflected in all usages. Use new objects to avoid this.
 
 ## Development
 
