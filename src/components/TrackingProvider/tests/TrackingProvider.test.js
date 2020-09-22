@@ -20,7 +20,7 @@ import TrackingProvider from '../TrackingProvider.js';
 import sinon from 'sinon';
 
 const PROP_DATA = {
-    eventAnalytics: {
+    eventPayload: {
         'datepicker.close': {
             'who': 'you'
         },
@@ -42,7 +42,7 @@ const PROP_DATA = {
             'pain': 'always'
         }
     },
-    analytics: {
+    payload: {
         'location': 'top',
         'action': 'test',
         'language': 'english'
@@ -54,7 +54,7 @@ const PROP_DATA = {
 };
 
 const CONTEXT_DATA = {
-    eventAnalytics: {
+    eventPayload: {
         'datepicker.close': {
             'who': 'me'
         },
@@ -76,7 +76,7 @@ const CONTEXT_DATA = {
             'waitforever': 'sure'
         }
     },
-    analytics: {
+    payload: {
         'location': 'bottom',
         'action': 'failure',
         'zombie': 'walking'
@@ -88,14 +88,14 @@ const CONTEXT_DATA = {
 };
 
 const MERGED_DATA = {
-    eventAnalytics: {...CONTEXT_DATA.eventAnalytics, ...PROP_DATA.eventAnalytics},
+    eventPayload: {...CONTEXT_DATA.eventPayload, ...PROP_DATA.eventPayload},
     eventOptions: {...CONTEXT_DATA.eventOptions, ...PROP_DATA.eventOptions},
-    analytics: {...CONTEXT_DATA.analytics, ...PROP_DATA.analytics},
+    payload: {...CONTEXT_DATA.payload, ...PROP_DATA.payload},
     options: {...CONTEXT_DATA.options, ...PROP_DATA.options}
 };
 
-Object.keys(MERGED_DATA.eventAnalytics).forEach((key) => {
-    MERGED_DATA.eventAnalytics[key] = {...CONTEXT_DATA.eventAnalytics[key], ...PROP_DATA.eventAnalytics[key]};
+Object.keys(MERGED_DATA.eventPayload).forEach((key) => {
+    MERGED_DATA.eventPayload[key] = {...CONTEXT_DATA.eventPayload[key], ...PROP_DATA.eventPayload[key]};
 });
 Object.keys(MERGED_DATA.eventOptions).forEach((key) => {
     MERGED_DATA.eventOptions[key] = {...CONTEXT_DATA.eventOptions[key], ...PROP_DATA.eventOptions[key]};
@@ -114,9 +114,9 @@ describe('<TrackingProvider/>', () => {
             const provider = shallow(<TrackingProvider />).instance();
             expect(provider.TrackingContext).to.deep.equal({
                 _data: {
-                    eventAnalytics: undefined, // eslint-disable-line no-undefined
+                    eventPayload: undefined, // eslint-disable-line no-undefined
                     eventOptions: undefined, // eslint-disable-line no-undefined
-                    analytics: undefined, // eslint-disable-line no-undefined
+                    payload: undefined, // eslint-disable-line no-undefined
                     options: undefined, // eslint-disable-line no-undefined
                     trigger: provider.TrackingContext._data.trigger
                 },
@@ -129,7 +129,7 @@ describe('<TrackingProvider/>', () => {
         it('should initialize TrackingContext with specified properties', () => {
             const triggerStub = sinon.stub();
             const _data = {
-                eventAnalytics: {
+                eventPayload: {
                     myEvent: {
                         one: 'one',
                         two: 'two'
@@ -140,7 +140,7 @@ describe('<TrackingProvider/>', () => {
                         three: 'four'
                     }
                 },
-                analytics: {
+                payload: {
                     five: 'six',
                     seven: 'eight'
                 },
@@ -161,7 +161,7 @@ describe('<TrackingProvider/>', () => {
         it('should initialize nested TrackingContext with specified properties', () => {
             const triggerStub = sinon.stub();
             const _data = {
-                eventAnalytics: {
+                eventPayload: {
                     myEvent: {
                         one: 'one',
                         two: 'two'
@@ -172,7 +172,7 @@ describe('<TrackingProvider/>', () => {
                         three: 'three'
                     }
                 },
-                analytics: {
+                payload: {
                     five: 'five',
                     seven: 'seven'
                 },
@@ -183,7 +183,7 @@ describe('<TrackingProvider/>', () => {
             };
 
             const _data2 = {
-                eventAnalytics: {
+                eventPayload: {
                     myEvent: {
                         one: 'one2',
                         three: 'three'
@@ -203,7 +203,7 @@ describe('<TrackingProvider/>', () => {
                         four: 'four'
                     }
                 },
-                analytics: {
+                payload: {
                     five: 'six2',
                     eight: 'eight'
                 },
@@ -216,10 +216,10 @@ describe('<TrackingProvider/>', () => {
             // This is ugly. Essentially need to deep merge to build the expected
             // data object but just doing this manually instead.
             const expectedData = JSON.parse(JSON.stringify(_data));
-            Object.assign(expectedData.eventAnalytics.myEvent, _data2.eventAnalytics.myEvent);
-            expectedData.eventAnalytics.secondEvent = _data2.eventAnalytics.secondEvent;
+            Object.assign(expectedData.eventPayload.myEvent, _data2.eventPayload.myEvent);
+            expectedData.eventPayload.secondEvent = _data2.eventPayload.secondEvent;
             Object.assign(expectedData.eventOptions, _data2.eventOptions);
-            Object.assign(expectedData.analytics, _data2.analytics);
+            Object.assign(expectedData.payload, _data2.payload);
             Object.assign(expectedData.options, _data2.options);
             // Should inherit the parent trigger method.
             expectedData.trigger = triggerStub;
@@ -293,14 +293,14 @@ describe('<TrackingProvider/>', () => {
             expect(provider.trigger).to.throw('event is a required parameter');
         });
 
-        it('should trigger an event with merged analytics and options', () => {
+        it('should trigger an event with merged payload and options', () => {
             const event = 'datepicker.close';
-            const provider = shallow(<TrackingProvider trigger={triggerSpy} eventAnalytics={PROP_DATA.eventAnalytics} eventOptions={PROP_DATA.eventOptions} analytics={PROP_DATA.analytics} options={PROP_DATA.options}/>).instance();
-            provider.trigger(event, CONTEXT_DATA.analytics, CONTEXT_DATA.options);
+            const provider = shallow(<TrackingProvider trigger={triggerSpy} eventPayload={PROP_DATA.eventPayload} eventOptions={PROP_DATA.eventOptions} payload={PROP_DATA.payload} options={PROP_DATA.options}/>).instance();
+            provider.trigger(event, CONTEXT_DATA.payload, CONTEXT_DATA.options);
             expect(triggerSpy.calledOnce).to.equal(true);
             const args = triggerSpy.args[0];
             expect(args[0]).to.equal(event);
-            expect(args[1]).to.deep.equal({...PROP_DATA.analytics, ...PROP_DATA.eventAnalytics[event], ...CONTEXT_DATA.analytics});
+            expect(args[1]).to.deep.equal({...PROP_DATA.payload, ...PROP_DATA.eventPayload[event], ...CONTEXT_DATA.payload});
             expect(args[2]).to.deep.equal({...PROP_DATA.options, ...PROP_DATA.eventOptions[event], ...CONTEXT_DATA.options});
         });
     });
@@ -313,13 +313,13 @@ describe('<TrackingProvider/>', () => {
         });
 
         it('should set this.TrackingContext._data to context data when no data passed', () => {
-            const trackingProvider = shallow(<TrackingProvider trigger={triggerSpy} eventAnalytics={PROP_DATA.eventAnalytics} eventOptions={PROP_DATA.eventOptions} analytics={PROP_DATA.analytics} options={PROP_DATA.options}/>).instance();
+            const trackingProvider = shallow(<TrackingProvider trigger={triggerSpy} eventPayload={PROP_DATA.eventPayload} eventOptions={PROP_DATA.eventOptions} payload={PROP_DATA.payload} options={PROP_DATA.options}/>).instance();
             trackingProvider.renderProvider();
             expect(trackingProvider.TrackingContext._data).to.deep.equal({...PROP_DATA, trigger: triggerSpy});
         });
 
         it('should set this.TrackingContext._data to merge of context data', () => {
-            const trackingProvider = shallow(<TrackingProvider trigger={triggerSpy} eventAnalytics={PROP_DATA.eventAnalytics} eventOptions={PROP_DATA.eventOptions} analytics={PROP_DATA.analytics} options={PROP_DATA.options}/>).instance();
+            const trackingProvider = shallow(<TrackingProvider trigger={triggerSpy} eventPayload={PROP_DATA.eventPayload} eventOptions={PROP_DATA.eventOptions} payload={PROP_DATA.payload} options={PROP_DATA.options}/>).instance();
             trackingProvider.renderProvider({_data: CONTEXT_DATA});
             expect(trackingProvider.TrackingContext._data).to.deep.equal({...MERGED_DATA, trigger: triggerSpy});
         });

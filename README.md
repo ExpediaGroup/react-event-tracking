@@ -36,39 +36,39 @@ const {TrackingProvider, TrackingContext} = require('@vrbo/react-event-tracking'
 const {TrackingProvider, TrackingContext} = require('@vrbo/react-event-tracking');
 ```
 
-Applications use a `TrackingProvider` to define the event triggering implementation and wrap components that trigger events with additional analytics and options that will be merged into the triggered event.
+Applications use a `TrackingProvider` to define the event triggering implementation and wrap components that trigger events with additional payload and options that will be merged into the triggered event.
 
-Components make use of `TrackingContext` or `TrackingTrigger` to trigger events which will automatically merge the analytics and options specified at higher levels in the DOM through one or more `TrackingProvider` components.
+Components make use of `TrackingContext` or `TrackingTrigger` to trigger events which will automatically merge the payload and options specified at higher levels in the DOM through one or more `TrackingProvider` components.
 
 ### TrackingProvider
 
-The `TrackingProvider` is a [React 16 context provider](https://reactjs.org/docs/context.html) component that allows an application to define the event trigger implementation and incrementally build the analytics and options for analytic events that will trigger from nested components. Using the `TrackingProvider` enables components at the lowest level to trigger events with the necessary set of analytics and options. The `TrackingProvider` is intended as a generic provider that does not require the use of a specific analytic event tracking library.
+The `TrackingProvider` is a [React 16 context provider](https://reactjs.org/docs/context.html) component that allows an application to define the event trigger implementation and incrementally build the payload and options for analytic events that will trigger from nested components. Using the `TrackingProvider` enables components at the lowest level to trigger events with the necessary set of payload and options. The `TrackingProvider` is intended as a generic provider that does not require the use of a specific analytic event tracking library.
 
 > Note: It is strongly recommended that property values for the TrackingProvider be defined in state or constant variables instead of building the values dynamically on every render. If the values are constructed during the render, it will cause a FORCE RE-RENDER of ALL consumers of the context that are descendants of the provider, even if the consumer's shouldComponentUpdate bails out. Following a pattern of defining property values as constants or via state will prevent unnecessary renders of children context consumers.
 
 | PROPERTY       | TYPE                | DEFAULT  | DESCRIPTION |
 | -------------- | ------------------- | -------- | ----------- |
-| eventAnalytics | objectOf (objectOf) | ──       | An object of event specific analytics where the event name is the key and the value is an object of field key/value pairs for the event. Event specific values will be merged with defaults from the `analytics` property. |
+| eventPayload   | objectOf (objectOf) | ──       | An object of event specific payload where the event name is the key and the value is an object of field key/value pairs for the event. Event specific values will be merged with defaults from the `payload` property. |
 | eventOptions   | objectOf (objectOf) | ──       | An object of event specific options where the event name is the key and the value is an object of option key/value pairs for the event. Event specific values will be merged with defaults from the `options` property. |
-| analytics      | objectOf (any)      | ──       | Object of any values that represents the default analytics to apply to all events within this context. |
+| payload        | objectOf (any)      | ──       | Object of any values that represents the default payload to apply to all events within this context. |
 | options        | objectOf (any)      | ──       | The trigger options. |
 | overwrite      | bool                | false    | When true, overwrites the current context with specified properties. Default is to merge instead of overwrite. |
 | trigger        | func                | () => {} | Tracking event trigger implementation. |
 
-In the example below the `Calendar` component is known to trigger some events so the consuming application wraps it with a `TrackingProvider` and the appropriate configuration of analytics and options as well as the implementation of `trigger` appropriate for the application.
+In the example below the `Calendar` component is known to trigger some events so the consuming application wraps it with a `TrackingProvider` and the appropriate configuration of payload and options as well as the implementation of `trigger` appropriate for the application.
 
 ```jsx
 import {TrackingProvider} from '@vrbo/react-event-tracking';
-const defaultAnalytics = {location: 'top-right'};
+const defaultPayload = {location: 'top-right'};
 const defaultOptions = {asynchronous: true};
-const customTrigger = (event, analytics, options) => {
+const customTrigger = (event, payload, options) => {
     // Implement custom event tracking.
 }
 
 function App(props) {
     return (
         <TrackingProvider
-            analytics={defaultAnalytics}
+            payload={defaultPayload}
             options={defaultOptions}
             trigger={customTrigger}
         >
@@ -84,7 +84,7 @@ For further details on usage of the `TrackingProvider` component view the [compo
 
 ### TrackingContext
 
-While the `TrackingProvider` component is used to incrementally build the analytics and options for an event and define the trigger implementation, the `TrackingContext` module is used to trigger the analytic event. Structuring a component to use `TrackingContext` will provide access to the `trigger` method to trigger analytic events via `this.context.trigger`.
+While the `TrackingProvider` component is used to incrementally build the payload and options for an event and define the trigger implementation, the `TrackingContext` module is used to trigger the analytic event. Structuring a component to use `TrackingContext` will provide access to the `trigger` method to trigger analytic events via `this.context.trigger`.
 
 In the example below, `MyComponent` is configured to use the `TrackingContext` module and then triggers a `generic.click` event when the `handleClick()` method is invoked:
 
@@ -105,31 +105,31 @@ class MyComponent extends React.Component {
 The trigger API has the following signature:
 
 ```javascript
-trigger(event, analytics, options)
+trigger(event, payload, options)
 ```
 
 Where:
 
 * event - The name of the event to trigger (String)
-* analytics - The required and optional analytics for the event (Object).
+* payload - The required and optional payload for the event (Object).
 * options - The trigger options to use when triggering the event (Object)
 
 For further details on usage of the `TrackingContext` module view the [module documentation](markdown/TrackingContext.md).
 
 ### TrackingTrigger
 
-The `TrackingTrigger` component allows an application to declaratively trigger an analytic event. It is used in conjunction with the `TrackingProvider` component to trigger events in a standardized way. Specify the desired event name, analytics and options to include when the event is triggered. The event will be triggered with a merge of the specified analytics and options and the current context when the containing component’s `componentDidMount` is invoked.
+The `TrackingTrigger` component allows an application to declaratively trigger an analytic event. It is used in conjunction with the `TrackingProvider` component to trigger events in a standardized way. Specify the desired event name, payload and options to include when the event is triggered. The event will be triggered with a merge of the specified payload and options and the current context when the containing component’s `componentDidMount` is invoked.
 
 | PROPERTY     | TYPE                | DEFAULT  | DESCRIPTION |
 | ------------ | ------------------- | -------- | ----------- |
 | event        | string              | ──       | The event to trigger |
-| analytics    | objectOf (any)      | {}       | The event specific analytics |
+| payload      | objectOf (any)      | {}       | The event specific payload |
 | onTrigger    | func                | () => {} | Callback function invoked after the event successfully triggered. |
 | options      | objectOf (any)      | {}       | The trigger options. |
 
 ```jsx
 import {TrackingTrigger} from '@vrbo/react-event-tracking';
-const eventAnalytics = {
+const eventPayload = {
     location: 'searchbar',
     name: 'Calendar'
 };
@@ -140,7 +140,7 @@ function Calendar(props) {
         ...
         <TrackingTrigger
             event={'viewed'}
-            analytics={eventAnalytics}
+            payload={eventPayload}
             options={eventOptions}
         />
     );

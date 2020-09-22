@@ -24,8 +24,8 @@ class EventButtonMultiple extends PureComponent {
     static propTypes = {
         /** Event name. */
         event: PropTypes.string,
-        /** Object of string values that represents the default analytics to apply to all events within this context. */
-        analytics: PropTypes.objectOf(PropTypes.any),
+        /** Object of string values that represents the default payload to apply to all events within this context. */
+        payload: PropTypes.objectOf(PropTypes.any),
         /** Button label. */
         label: PropTypes.string,
         /** The trigger options. */
@@ -35,7 +35,7 @@ class EventButtonMultiple extends PureComponent {
     static defaultProps = {
         event: 'generic.click',
         expected: {},
-        analytics: {},
+        payload: {},
         label: 'Click Me',
         options: {}
     };
@@ -53,9 +53,9 @@ class EventButtonMultiple extends PureComponent {
     }
 
     handleClick = () => {
-        const {event, analytics, options} = this.props;
+        const {event, payload, options} = this.props;
 
-        this.context.trigger(event, analytics, options);
+        this.context.trigger(event, payload, options);
         this.check(this.secondValue);
     }
 

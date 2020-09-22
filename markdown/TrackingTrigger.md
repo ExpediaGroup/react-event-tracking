@@ -2,11 +2,11 @@ The `TrackingTrigger` component allows an application to declaratively trigger a
 
 ## Base Usage
 
-Use the `TrackingTrigger` component within a `TrackingProvider` component hierarchy. Specify the desired event name, analytics and options to include when the event is triggered. The event will be triggered with a merge of the specified analytics and options and the current context when the component's `componentDidMount` is invoked.
+Use the `TrackingTrigger` component within a `TrackingProvider` component hierarchy. Specify the desired event name, payload and options to include when the event is triggered. The event will be triggered with a merge of the specified payload and options and the current context when the component's `componentDidMount` is invoked.
 
 ```jsx
 import {TrackingTrigger} from '@vrbo/react-event-tracking';
-const eventAnalytics = {
+const eventPayload = {
     location: 'searchbar',
     name: 'SomeComponent'
 };
@@ -17,7 +17,7 @@ function SomeComponent(props) {
         ...
         <TrackingTrigger
             event={'visible'}
-            analytics={eventAnalytics}
+            payload={eventPayload}
             options={eventOptions}
         />
     );
