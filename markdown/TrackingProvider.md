@@ -45,7 +45,7 @@ Where:
 
 ## TrackingProvider Nesting
 
-Multiple `TrackingProvider` components can be nested in order to iteratively enhance the configuration where the information is known. For example, consider a scenario where a `Calendar` component uses a `EventButton` component which triggers a `button.click` event. An application can build the set of payload needed for the `button.click` by nesting `TrackingProvider` wrappers in the areas of code that know the related information.
+Multiple `TrackingProvider` components can be nested in order to iteratively enhance the configuration where the information is known. For example, consider a scenario where a `Calendar` component uses a `EventButton` component which triggers a `button.click` event. An application can build the payload needed for the `button.click` by nesting `TrackingProvider` wrappers in the areas of code that know the related information.
 
 ### Example application wrapping a nested component
 
@@ -85,7 +85,7 @@ function CalendarButton(props) {
 }
 ```
 
-When `EventButton` triggers the `button.click` event, the trigger handler will be sent the combined set of payload (`{category: 'My App', location: 'top-right'}`) from the nested `TrackingProvider` instances.
+When `EventButton` triggers the `button.click` event, the trigger handler will be sent the combined payload (`{category: 'My App', location: 'top-right'}`) from the nested `TrackingProvider` instances.
 
 ## Event Specific Configuration
 

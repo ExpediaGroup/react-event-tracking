@@ -24,13 +24,13 @@ import TrackingContext from '../../context/TrackingContext';
  */
 class TrackingProvider extends PureComponent {
     static propTypes = {
-        /** (Deprecated) An object of event specific payload where the event name is the key and the value is an object of field key/value pairs for the event. Event specific values will be merged with defaults from the `payload` property. */
+        /** (Deprecated) An object of event specific fields where the event name is the key and the value is an object of field key/value pairs for the event. Event specific values will be merged with defaults from the `fields` property. The `eventPayload` property takes precedence over this property if both are specified. */
         eventFields: PropTypes.objectOf(PropTypes.objectOf(PropTypes.string)),
-        /** An object of event specific payload where the event name is the key and the value is an object of field key/value pairs for the event. Event specific values will be merged with defaults from the `payload` property. */
+        /** An object of event specific payloads where the event name is the key and the value is an object of key/value pairs for the event. Event specific values will be merged with defaults from the `payload` property. */
         eventPayload: PropTypes.objectOf(PropTypes.objectOf(PropTypes.any)),
         /** An object of event specific options where the event name is the key and the value is an object of option key/value pairs for the event. Event specific values will be merged with defaults from the `options` property. */
         eventOptions: PropTypes.objectOf(PropTypes.objectOf(PropTypes.any)),
-        /** (Deprecated) Object of string values that represents the default payload to apply to all events within this context. */
+        /** (Deprecated) Object of string values that represents the default payload to apply to all events within this context. The `payload` property takes precedence over this property if both specified. */
         fields: PropTypes.objectOf(PropTypes.string),
         /** Object of values that represents the default payload to apply to all events within this context. */
         payload: PropTypes.objectOf(PropTypes.any),

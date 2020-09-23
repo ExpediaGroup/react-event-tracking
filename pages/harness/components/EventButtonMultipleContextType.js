@@ -24,7 +24,7 @@ class EventButtonMultiple extends PureComponent {
     static propTypes = {
         /** Event name. */
         event: PropTypes.string,
-        /** Object of string values that represents the default payload to apply to all events within this context. */
+        /** Object of key/value pairs that represents the default payload to apply to all events within this context. */
         payload: PropTypes.objectOf(PropTypes.any),
         /** Button label. */
         label: PropTypes.string,

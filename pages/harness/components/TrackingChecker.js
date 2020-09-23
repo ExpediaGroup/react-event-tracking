@@ -20,13 +20,13 @@ import './TrackingChecker.less';
 
 class TrackingChecker extends PureComponent {
     static propTypes = {
-        /** An object of event specific payload where the event name is the key and the value is an object of field key/value pairs for the event. Event specific values will be merged with defaults from the `payload` property. */
+        /** An object of event specific payloads where the event name is the key and the value is an object of key/value pairs for the event. Event specific values will be merged with defaults from the `payload` property. */
         eventPayload: PropTypes.objectOf(PropTypes.objectOf(PropTypes.any)),
         /** An object of event specific options where the event name is the key and the value is an object of option key/value pairs for the event. Event specific values will be merged with defaults from the `options` property. */
         eventOptions: PropTypes.objectOf(PropTypes.objectOf(PropTypes.any)),
         /** The expected data configuration. */
         expected: PropTypes.object,
-        /** Object of string values that represents the default payload to apply to all events within this context. */
+        /** Object of key/value pairs that represents the default payload to apply to all events within this context. */
         payload: PropTypes.objectOf(PropTypes.any),
         /** The trigger options. */
         options: PropTypes.objectOf(PropTypes.any),

@@ -4,7 +4,7 @@
 
 Structuring a component to use `TrackingContext` will provide access to the `trigger` method to trigger events. Use one of the two methods shown below to configure the context for a React component. Once configured as shown, the component can then access the `trigger` method via `this.context.trigger`.
 
-If the babel configuration for the application includes support for [public class analytics syntax](https://babeljs.io/docs/plugins/transform-class-properties/) and the application is using **react ^16.6.0**, use a *static* class field to initialize the `contextType`:
+If the babel configuration for the application includes support for [public class fields syntax](https://babeljs.io/docs/plugins/transform-class-properties/) and the application is using **react ^16.6.0**, use a *static* class field to initialize the `contextType`:
 
 ```jsx
 import React, {Component} from 'react';
@@ -20,7 +20,7 @@ class MyComponent extends Component {
 }
 ```
 
-Alternatively, if a component is not using public class analytics syntax, set the `contextType` directly on the class:
+Alternatively, if a component is not using public class fields syntax, set the `contextType` directly on the class:
 
 ```jsx
 import React, {Component} from 'react';
@@ -48,7 +48,7 @@ trigger(event, payload, options)
 Where:
 
 - **event** - The name of the event to trigger (String).
-- **payload** - The required and optional payload for the event (Object of string values).
+- **payload** - The required and optional payload for the event (Object of any values).
 - **options** - Options for the trigger API to use when triggering the event. (Object)
 
 ## Determine if provider exists
