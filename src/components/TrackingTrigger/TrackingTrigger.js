@@ -25,7 +25,7 @@ class TrackingTrigger extends PureComponent {
     static propTypes = {
         /** The event to trigger. */
         event: PropTypes.string.isRequired,
-        /** (Deprecated) The event specific fields. */
+        /** (Deprecated) The event specific fields. The `payload` property takes precedence over this property if both are specified. */
         fields: PropTypes.objectOf(PropTypes.string),
         /** The event specific payload. */
         payload: PropTypes.objectOf(PropTypes.any),
