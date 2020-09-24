@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/homeaway/react-event-tracking.svg?branch=master)](https://travis-ci.org/homeaway/react-event-tracking)
+[![Build Status](https://travis-ci.org/ExpediaGroup/react-event-tracking.svg?branch=master)](https://travis-ci.org/ExpediaGroup/react-event-tracking)
 
 # react-event-tracking
 
