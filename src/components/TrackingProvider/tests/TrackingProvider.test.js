@@ -171,90 +171,6 @@ const CONTEXT_DATA = {
     }
 };
 
-const CONTEXT_DATA_FIELDS = {
-    eventFields: {
-        'datepicker.close': {
-            'who': 'me'
-        },
-        'datepicker.open': {
-            'who': 'me'
-        },
-        'generic.click': {
-            'dummy': 'ohyeah'
-        }
-    },
-    eventOptions: {
-        'datepicker.close': {
-            'doitnow': 'no'
-        },
-        'datepicker.open': {
-            'doitnow': 'no'
-        },
-        'generic.event': {
-            'waitforever': 'sure'
-        }
-    },
-    fields: {
-        'location': 'bottom',
-        'action': 'failure',
-        'zombie': 'walking'
-    },
-    options: {
-        'delay': '404',
-        'up': 'down'
-    }
-};
-
-const CONTEXT_DATA_FIELDS_PAYLOAD = {
-    eventFields: {
-        'datepicker.close': {
-            'who': 'not me'
-        },
-        'datepicker.open': {
-            'who': 'not me'
-        },
-        'generic.click': {
-            'dummy': 'not ohyeah'
-        }
-    },
-    eventPayload: {
-        'datepicker.close': {
-            'who': 'me'
-        },
-        'datepicker.open': {
-            'who': 'me'
-        },
-        'generic.click': {
-            'dummy': 'ohyeah'
-        }
-    },
-    eventOptions: {
-        'datepicker.close': {
-            'doitnow': 'no'
-        },
-        'datepicker.open': {
-            'doitnow': 'no'
-        },
-        'generic.event': {
-            'waitforever': 'sure'
-        }
-    },
-    fields: {
-        'location': 'top',
-        'action': 'success',
-        'zombie': 'running'
-    },
-    payload: {
-        'location': 'bottom',
-        'action': 'failure',
-        'zombie': 'walking'
-    },
-    options: {
-        'delay': '404',
-        'up': 'down'
-    }
-};
-
 const MERGED_DATA = {
     eventPayload: {...CONTEXT_DATA.eventPayload, ...PROP_DATA.eventPayload},
     eventOptions: {...CONTEXT_DATA.eventOptions, ...PROP_DATA.eventOptions},
@@ -426,7 +342,7 @@ describe('<TrackingProvider/>', () => {
 
         it('should return the specified properties as the data if overwrite is true even when using fields instead of payload', () => {
             const provider = shallow(<TrackingProvider {...PROP_DATA_FIELDS} overwrite/>).instance();
-            const result = provider.mergeContextData(CONTEXT_DATA_FIELDS);
+            const result = provider.mergeContextData(CONTEXT_DATA);
             expect(result).to.deep.equal(PROP_DATA); // Everything gets mapped back from eventFields/fields to eventPayload/payload
         });
 
@@ -438,7 +354,7 @@ describe('<TrackingProvider/>', () => {
 
         it('should return the context data if no data properties specified and overwrite is true even when using fields instead of payload', () => {
             const provider = shallow(<TrackingProvider overwrite/>).instance();
-            const result = provider.mergeContextData(CONTEXT_DATA_FIELDS);
+            const result = provider.mergeContextData(CONTEXT_DATA);
             expect(result).to.deep.equal(CONTEXT_DATA);
         });
 
@@ -450,7 +366,7 @@ describe('<TrackingProvider/>', () => {
 
         it('should return the context data if no data properties specified and overwrite is false even when using fields instead of payload', () => {
             const provider = shallow(<TrackingProvider/>).instance();
-            const result = provider.mergeContextData(CONTEXT_DATA_FIELDS);
+            const result = provider.mergeContextData(CONTEXT_DATA);
             expect(result).to.deep.equal(CONTEXT_DATA);
         });
 
@@ -462,7 +378,7 @@ describe('<TrackingProvider/>', () => {
 
         it('should return a merge of the specified properties and data if overwrite is false even when using fields instead of payload', () => {
             const provider = shallow(<TrackingProvider {...PROP_DATA_FIELDS}/>).instance();
-            const result = provider.mergeContextData(CONTEXT_DATA_FIELDS);
+            const result = provider.mergeContextData(CONTEXT_DATA);
             expect(result).to.deep.equal(MERGED_DATA);
         });
 
@@ -474,7 +390,7 @@ describe('<TrackingProvider/>', () => {
 
         it('should prefer payload over fields if overwrite is false', () => {
             const provider = shallow(<TrackingProvider {...PROP_DATA_FIELDS_PAYLOAD}/>).instance();
-            const result = provider.mergeContextData(CONTEXT_DATA_FIELDS_PAYLOAD);
+            const result = provider.mergeContextData(CONTEXT_DATA);
             expect(result).to.deep.equal(MERGED_DATA);
         });
 
