@@ -25,6 +25,8 @@ class TrackingTrigger extends PureComponent {
     static propTypes = {
         /** The event to trigger. */
         event: PropTypes.string.isRequired,
+        /** (Deprecated) The event specific fields. */
+        fields: PropTypes.objectOf(PropTypes.string),
         /** The event specific payload. */
         payload: PropTypes.objectOf(PropTypes.any),
         /** Callback function invoked after the event successfully triggered. */
@@ -34,13 +36,15 @@ class TrackingTrigger extends PureComponent {
     };
 
     static defaultProps = {
-        payload: {},
         onTrigger: () => {},
         options: {}
     };
 
     componentDidMount() {
-        const {event, payload, onTrigger, options} = this.props;
+        const {event, fields, onTrigger, options} = this.props;
+        let {payload} = this.props;
+        payload = payload || fields || {};
+
         if (typeof this.trigger === 'function') {
             const triggerContext = this.trigger(event, payload, options);
             onTrigger(triggerContext);
@@ -53,7 +57,7 @@ class TrackingTrigger extends PureComponent {
         // Save a reference to the trigger method for use in componentDidMount.
         this.trigger = trigger;
         return children;
-    }
+    };
 
     render() {
         return (

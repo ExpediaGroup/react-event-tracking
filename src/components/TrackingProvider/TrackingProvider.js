@@ -75,8 +75,13 @@ class TrackingProvider extends PureComponent {
         let {eventPayload, payload} = this.props;
         const newData = {};
 
+        // Prefer new data payload name, but fall back for backwards compatibility
         eventPayload = eventPayload || eventFields;
         payload = payload || fields;
+
+        // Necessary for overwrite fall back
+        data.eventPayload = data.eventPayload || data.eventFields;
+        data.payload = data.payload || data.fields;
 
         if (overwrite) {
             newData.eventPayload = eventPayload || data.eventPayload;

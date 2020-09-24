@@ -54,6 +54,23 @@ describe('<TrackingTrigger/>', () => {
             expect(triggerSpy.calledWith(event, payload, options)).to.equal(true);
         });
 
+        it('should trigger the specified event, fields (deprecated but falling back) and options', () => {
+            const event = 'use.force';
+            const fields = {
+                luke: 'yes',
+                padme: 'no'
+            };
+            const options = {
+                darkside: 'no'
+            };
+            const trigger = shallow(<TrackingTrigger event={event} fields={fields} options={options}/>).instance();
+            const triggerSpy = sinon.spy();
+            trigger.trigger = triggerSpy;
+            trigger.componentDidMount();
+            expect(triggerSpy.called).to.equal(true);
+            expect(triggerSpy.calledWith(event, fields, options)).to.equal(true);
+        });
+
         it('should call the onTrigger callback with the specified event', () => {
             const event = 'use.force';
             const triggerSpy = sinon.spy();
