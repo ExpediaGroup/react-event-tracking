@@ -36,39 +36,41 @@ const {TrackingProvider, TrackingContext} = require('@vrbo/react-event-tracking'
 const {TrackingProvider, TrackingContext} = require('@vrbo/react-event-tracking');
 ```
 
-Applications use a `TrackingProvider` to define the event triggering implementation and wrap components that trigger events with additional fields and options that will be merged into the triggered event.
+Applications use a `TrackingProvider` to define the event triggering implementation and wrap components that trigger events with additional payload and options that will be merged into the triggered event.
 
-Components make use of `TrackingContext` or `TrackingTrigger` to trigger events which will automatically merge the fields and options specified at higher levels in the DOM through one or more `TrackingProvider` components.
+Components make use of `TrackingContext` or `TrackingTrigger` to trigger events which will automatically merge the payload and options specified at higher levels in the DOM through one or more `TrackingProvider` components.
 
 ### TrackingProvider
 
-The `TrackingProvider` is a [React 16 context provider](https://reactjs.org/docs/context.html) component that allows an application to define the event trigger implementation and incrementally build the fields and options for analytic events that will trigger from nested components. Using the `TrackingProvider` enables components at the lowest level to trigger events with the necessary set of fields and options. The `TrackingProvider` is intended as a generic provider that does not require the use of a specific analytic event tracking library.
+The `TrackingProvider` is a [React 16 context provider](https://reactjs.org/docs/context.html) component that allows an application to define the event trigger implementation and incrementally build the payload and options for analytic events that will trigger from nested components. Using the `TrackingProvider` enables components at the lowest level to trigger events with the necessary set of payload and options. The `TrackingProvider` is intended as a generic provider that does not require the use of a specific analytic event tracking library.
 
 > Note: It is strongly recommended that property values for the TrackingProvider be defined in state or constant variables instead of building the values dynamically on every render. If the values are constructed during the render, it will cause a FORCE RE-RENDER of ALL consumers of the context that are descendants of the provider, even if the consumer's shouldComponentUpdate bails out. Following a pattern of defining property values as constants or via state will prevent unnecessary renders of children context consumers.
 
-| PROPERTY     | TYPE                | DEFAULT  | DESCRIPTION |
-| ------------ | ------------------- | -------- | ----------- |
-| eventFields  | objectOf (objectOf) | ──       | An object of event specific fields where the event name is the key and the value is an object of field key/value pairs for the event. Event specific values will be merged with defaults from the `fields` property. |
-| eventOptions | objectOf (objectOf) | ──       | An object of event specific options where the event name is the key and the value is an object of option key/value pairs for the event. Event specific values will be merged with defaults from the `options` property. |
-| fields       | objectOf (string)   | ──       | Object of string values that represents the default fields to apply to all events within this context. |
-| options      | objectOf (string)   | ──       | The trigger options. |
-| overwrite    | bool                | false    | When true, overwrites the current context with specified properties. Default is to merge instead of overwrite. |
-| trigger      | func                | () => {} | Tracking event trigger implementation. |
+| PROPERTY       | TYPE                | DEFAULT  | DESCRIPTION |
+| -------------- | ------------------- | -------- | ----------- |
+| eventPayload   | objectOf (objectOf) | ──       | An object of event specific payload where the event name is the key and the value is an object of field key/value pairs for the event. Event specific values will be merged with defaults from the `payload` property. |
+| eventFields    | objectOf (objectOf) | ──       | (Deprecated) An object of event specific fields where the event name is the key and the value is an object of field key/value pairs for the event. Event specific values will be merged with defaults from the `fields` property. The `eventPayload` property takes precedence over this property if both are specified. |
+| eventOptions   | objectOf (objectOf) | ──       | An object of event specific options where the event name is the key and the value is an object of option key/value pairs for the event. Event specific values will be merged with defaults from the `options` property. |
+| payload        | objectOf (any)      | ──       | Object of any values that represents the default payload to apply to all events within this context. |
+| fields         | objectOf (string)   | ──       | (Deprecated) Object of string values that represents the default fields to apply to all events within this context. The `payload` property takes precedence over this property if both are specified.  |
+| options        | objectOf (any)      | ──       | The trigger options. |
+| overwrite      | bool                | false    | When true, overwrites the current context with specified properties. Default is to merge instead of overwrite. |
+| trigger        | func                | () => {} | Tracking event trigger implementation. |
 
-In the example below the `Calendar` component is known to trigger some events so the consuming application wraps it with a `TrackingProvider` and the appropriate configuration of fields and options as well as the implementation of `trigger` appropriate for the application.
+In the example below the `Calendar` component is known to trigger some events so the consuming application wraps it with a `TrackingProvider` and the appropriate configuration of payload and options as well as the implementation of `trigger` appropriate for the application.
 
 ```jsx
 import {TrackingProvider} from '@vrbo/react-event-tracking';
-const defaultFields = {location: 'top-right'};
+const defaultPayload = {location: 'top-right'};
 const defaultOptions = {asynchronous: true};
-const customTrigger = (event, fields, options) => {
+const customTrigger = (event, payload, options) => {
     // Implement custom event tracking.
 }
 
 function App(props) {
     return (
         <TrackingProvider
-            fields={defaultFields}
+            payload={defaultPayload}
             options={defaultOptions}
             trigger={customTrigger}
         >
@@ -84,7 +86,7 @@ For further details on usage of the `TrackingProvider` component view the [compo
 
 ### TrackingContext
 
-While the `TrackingProvider` component is used to incrementally build the fields and options for an event and define the trigger implementation, the `TrackingContext` module is used to trigger the analytic event. Structuring a component to use `TrackingContext` will provide access to the `trigger` method to trigger analytic events via `this.context.trigger`.
+While the `TrackingProvider` component is used to incrementally build the payload and options for an event and define the trigger implementation, the `TrackingContext` module is used to trigger the analytic event. Structuring a component to use `TrackingContext` will provide access to the `trigger` method to trigger analytic events via `this.context.trigger`.
 
 In the example below, `MyComponent` is configured to use the `TrackingContext` module and then triggers a `generic.click` event when the `handleClick()` method is invoked:
 
@@ -105,31 +107,31 @@ class MyComponent extends React.Component {
 The trigger API has the following signature:
 
 ```javascript
-trigger(event, fields, options)
+trigger(event, payload, options)
 ```
 
 Where:
 
 * event - The name of the event to trigger (String)
-* fields - The required and optional fields for the event (Object of string values).
+* payload - The required and optional payload for the event (Object).
 * options - The trigger options to use when triggering the event (Object)
 
 For further details on usage of the `TrackingContext` module view the [module documentation](markdown/TrackingContext.md).
 
 ### TrackingTrigger
 
-The `TrackingTrigger` component allows an application to declaratively trigger an analytic event. It is used in conjunction with the `TrackingProvider` component to trigger events in a standardized way. Specify the desired event name, fields and options to include when the event is triggered. The event will be triggered with a merge of the specified fields and options and the current context when the containing component’s `componentDidMount` is invoked.
+The `TrackingTrigger` component allows an application to declaratively trigger an analytic event. It is used in conjunction with the `TrackingProvider` component to trigger events in a standardized way. Specify the desired event name, payload and options to include when the event is triggered. The event will be triggered with a merge of the specified payload and options and the current context when the containing component’s `componentDidMount` is invoked.
 
 | PROPERTY     | TYPE                | DEFAULT  | DESCRIPTION |
 | ------------ | ------------------- | -------- | ----------- |
 | event        | string              | ──       | The event to trigger |
-| fields       | objectOf (string)   | {}       | The event specific fields |
+| payload      | objectOf (any)      | {}       | The event specific payload |
 | onTrigger    | func                | () => {} | Callback function invoked after the event successfully triggered. |
-| options      | objectOf (string)   | {}       | The trigger options. |
+| options      | objectOf (any)      | {}       | The trigger options. |
 
 ```jsx
 import {TrackingTrigger} from '@vrbo/react-event-tracking';
-const eventFields = {
+const eventPayload = {
     location: 'searchbar',
     name: 'Calendar'
 };
@@ -140,7 +142,7 @@ function Calendar(props) {
         ...
         <TrackingTrigger
             event={'viewed'}
-            fields={eventFields}
+            payload={eventPayload}
             options={eventOptions}
         />
     );
@@ -155,6 +157,7 @@ For further details on usage of the `TrackingTrigger` component view the [compon
 * Prior to React 16.8.0 it was not possible for a component to use multiple `contextType` definitions. If a component needs to consume multiple `contextType` definitions, use the [hooks api](https://reactjs.org/docs/hooks-overview.html#other-hooks) made available in React 16.8.0.
 * If a `TrackingProvider` with a `trigger` implementation is not defined somewhere in the hierarchy, the `this.context.trigger` API will essentially be a no-op. This allows components to be enabled to trigger events regardless of whether the application is configured to trigger them.
 * Do not dynamically construct the property values for `TrackingProvider` unless you want all descendant consumers to force re-render. See the "Note" under the `TrackingProvider` section for more details.
+* Objects used in `eventPayload`, `eventOptions` and `payload` are shallow copied when merging data in the `TrackingProvider`, so changes to referenced objects would be reflected in all usages. Use new objects to avoid this.
 
 ## Development
 

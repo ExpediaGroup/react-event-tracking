@@ -22,9 +22,9 @@ import React from 'react';
  */
 const context = {
     _data: { // Intended for private use only
-        eventFields: {},
+        eventPayload: {},
         eventOptions: {},
-        fields: {},
+        payload: {},
         options: {},
         // The original trigger implementation passed in to TrackingProvider
         trigger: null

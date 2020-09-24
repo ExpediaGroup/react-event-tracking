@@ -1,4 +1,4 @@
-`TrackingContext` provides acccess to the current value of the context defined by a `TrackingProvider`. Use of `TrackingProvider` and `TrackingContext` enables an application to progressively build the fields and options and then trigger events at the lowest level.
+`TrackingContext` provides acccess to the current value of the context defined by a `TrackingProvider`. Use of `TrackingProvider` and `TrackingContext` enables an application to progressively build the payload and options and then trigger events at the lowest level.
 
 ## Base Usage
 
@@ -37,18 +37,18 @@ MyComponent.contextType = TrackingContext;
 
 ## Trigger API
 
-The `trigger` method is used to log an event with the framework. In combination with the `TrackingProvider` component, this enables an application to build the event fields and options throughout the DOM hierarchy and then trigger the event at the lowest level. Using this framework helps to ensure consistency in events as the lower level components can trigger the event generically while inheriting the fields and options defined higher in the DOM hierarchy through `TrackingProvider`.
+The `trigger` method is used to log an event with the framework. In combination with the `TrackingProvider` component, this enables an application to build the event payload and options throughout the DOM hierarchy and then trigger the event at the lowest level. Using this framework helps to ensure consistency in events as the lower level components can trigger the event generically while inheriting the payload and options defined higher in the DOM hierarchy through `TrackingProvider`.
 
 The `trigger` API has the following signature:
 
 ```javascript
-trigger(event, fields, options)
+trigger(event, payload, options)
 ```
 
 Where:
 
 - **event** - The name of the event to trigger (String).
-- **fields** - The required and optional fields for the event (Object of string values).
+- **payload** - The required and optional payload for the event (Object of any values).
 - **options** - Options for the trigger API to use when triggering the event. (Object)
 
 ## Determine if provider exists

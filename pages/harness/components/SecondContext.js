@@ -16,7 +16,7 @@
 import React from 'react';
 
 const context = {
-    myFields: {},
+    myPayload: {},
     otherStuff: {}
 };
 

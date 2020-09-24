@@ -23,8 +23,8 @@ class EventButton extends PureComponent {
     static propTypes = {
         /** Event name. */
         event: PropTypes.string,
-        /** Object of string values that represents the default fields to apply to all events within this context. */
-        fields: PropTypes.objectOf(PropTypes.string),
+        /** Object of key/value pairs that represents the default payload to apply to all events within this context. */
+        payload: PropTypes.objectOf(PropTypes.any),
         /** Button label. */
         label: PropTypes.string,
         /** The trigger options. */
@@ -33,7 +33,7 @@ class EventButton extends PureComponent {
 
     static defaultProps = {
         event: 'generic.click',
-        fields: {},
+        payload: {},
         label: 'Click Me',
         options: {}
     };
@@ -43,9 +43,9 @@ class EventButton extends PureComponent {
     }
 
     handleClick = () => {
-        const {event, fields, options} = this.props;
+        const {event, payload, options} = this.props;
 
-        this.context.trigger(event, fields, options);
+        this.context.trigger(event, payload, options);
     }
 
     render() {
