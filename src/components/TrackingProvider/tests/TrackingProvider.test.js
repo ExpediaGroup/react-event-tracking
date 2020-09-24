@@ -364,12 +364,6 @@ describe('<TrackingProvider/>', () => {
             expect(result).to.deep.equal(CONTEXT_DATA);
         });
 
-        it('should return the context data if no data properties specified and overwrite is false even when using fields instead of payload', () => {
-            const provider = shallow(<TrackingProvider/>).instance();
-            const result = provider.mergeContextData(CONTEXT_DATA);
-            expect(result).to.deep.equal(CONTEXT_DATA);
-        });
-
         it('should return a merge of the specified properties and data if overwrite is false', () => {
             const provider = shallow(<TrackingProvider {...PROP_DATA}/>).instance();
             const result = provider.mergeContextData(CONTEXT_DATA);
