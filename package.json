@@ -1,6 +1,6 @@
 {
   "name": "@vrbo/react-event-tracking",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "React shared context utilities for analytic event tracking.",
   "license": "Apache-2.0",
   "author": {
@@ -60,6 +60,7 @@
     "react"
   ],
   "dependencies": {
+    "merge-deep": "^3.0.3",
     "prop-types": "^15.5.10"
   },
   "peerDependencies": {
