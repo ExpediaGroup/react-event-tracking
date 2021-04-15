@@ -18,7 +18,6 @@ import PropTypes from 'prop-types';
 import TrackingContext from '../../context/TrackingContext';
 import mergeDeep from '../../utils/DeepMerge';
 
-
 /**
  * A React context provider that allows nesting to generate new context that
  * builds on parent context. This component allows applications to build the
