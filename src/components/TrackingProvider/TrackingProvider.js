@@ -16,7 +16,8 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import TrackingContext from '../../context/TrackingContext';
-const merge = require('merge-deep');
+import mergeDeep from '../../utils/DeepMerge';
+
 
 /**
  * A React context provider that allows nesting to generate new context that
@@ -87,10 +88,10 @@ class TrackingProvider extends PureComponent {
             newData.options = options || data.options;
         } else {
             // Not an overwrite so merge the properties and context objects
-            newData.eventPayload = merge(data.eventPayload, eventPayload);
-            newData.eventOptions = merge(data.eventOptions, eventOptions);
-            newData.payload = merge(data.payload, payload);
-            newData.options = merge(data.options, options);
+            newData.eventPayload = mergeDeep(data.eventPayload, eventPayload);
+            newData.eventOptions = mergeDeep(data.eventOptions, eventOptions);
+            newData.payload = mergeDeep(data.payload, payload);
+            newData.options = mergeDeep(data.options, options);
         }
 
         return newData;
@@ -111,8 +112,8 @@ class TrackingProvider extends PureComponent {
             throw new TypeError('event is a required parameter');
         }
 
-        payload = merge(data.payload, eventPayload, payload);
-        options = merge(data.options, eventOptions, options);
+        payload = mergeDeep(data.payload, eventPayload, payload);
+        options = mergeDeep(data.options, eventOptions, options);
         return data.trigger(name, payload, options);
     };
 

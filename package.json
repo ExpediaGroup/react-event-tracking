@@ -60,7 +60,6 @@
     "react"
   ],
   "dependencies": {
-    "merge-deep": "^3.0.3",
     "prop-types": "^15.5.10"
   },
   "peerDependencies": {
