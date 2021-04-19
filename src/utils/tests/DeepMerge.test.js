@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 import {expect} from 'chai';
-import mergeDeep from '../DeepMerge';
+import deepMerge from '../DeepMerge';
 
 describe('DeepMerge', () => {
     it('should handle undefined objects', () => {
         // eslint-disable-next-line no-undefined
-        const result = mergeDeep(undefined, {a: 1}, undefined);
+        const result = deepMerge(undefined, {a: 1}, undefined);
         expect(result).to.deep.equal({a: 1});
     });
 
@@ -58,7 +58,7 @@ describe('DeepMerge', () => {
             },
             j: 2
         };
-        const result = mergeDeep(obj1, obj2);
+        const result = deepMerge(obj1, obj2);
         expect(result).to.deep.equal({
             a: {
                 b: {
@@ -99,7 +99,7 @@ describe('DeepMerge', () => {
             }
         };
 
-        const result = mergeDeep(obj1, obj2);
+        const result = deepMerge(obj1, obj2);
         expect(result).to.deep.equal({
             a: 2,
             b: 'hello',

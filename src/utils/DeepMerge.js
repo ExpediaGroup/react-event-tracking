@@ -15,31 +15,30 @@
  */
 
 /**
- * Performs a deep merge of objects and returns new object. Does not modify
- * objects (immutable) and merges arrays via concatenation.
+ * Merges objects without modifying inputs.
+ * Arrays are concatinated.
+ * Object are merged recursively.
  *
- * @param {...object} objects - Objects to merge
- * @returns {object} New object with merged key/values
+ * @param {...object} inputObjects - Objects to merge
+ * @returns {object} Merged Object
  */
-function mergeDeep(...objects) {
-    const isObject = (obj) => obj && typeof obj === 'object';
-    return objects.reduce((prev, obj) => {
-        if (!obj) {
-            return prev;
+function deepMerge(...inputObjects) {
+    const isObject = (o) => o && typeof o === 'object';
+    return inputObjects.reduce((accumulated, current) => {
+        if (!current) {
+            return accumulated;
         }
-        Object.keys(obj).forEach((key) => {
-            const pVal = prev[key];
-            const oVal = obj[key];
-            if (Array.isArray(pVal) && Array.isArray(oVal)) {
-                prev[key] = pVal.concat(...oVal);
-            } else if (isObject(pVal) && isObject(oVal)) {
-                prev[key] = mergeDeep(pVal, oVal);
+        Object.keys(current).forEach((key) => {
+            if (Array.isArray(accumulated[key]) && Array.isArray(current[key])) {
+                accumulated[key] = accumulated[key].concat(...current[key]);
+            } else if (isObject(accumulated[key]) && isObject(current[key])) {
+                accumulated[key] = deepMerge(accumulated[key], current[key]);
             } else {
-                prev[key] = oVal;
+                accumulated[key] = current[key];
             }
         });
-        return prev;
+        return accumulated;
     }, {});
 }
 
-export default mergeDeep;
+export default deepMerge;
