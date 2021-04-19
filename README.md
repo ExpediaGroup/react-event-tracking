@@ -157,7 +157,7 @@ For further details on usage of the `TrackingTrigger` component view the [compon
 * Prior to React 16.8.0 it was not possible for a component to use multiple `contextType` definitions. If a component needs to consume multiple `contextType` definitions, use the [hooks api](https://reactjs.org/docs/hooks-overview.html#other-hooks) made available in React 16.8.0.
 * If a `TrackingProvider` with a `trigger` implementation is not defined somewhere in the hierarchy, the `this.context.trigger` API will essentially be a no-op. This allows components to be enabled to trigger events regardless of whether the application is configured to trigger them.
 * Do not dynamically construct the property values for `TrackingProvider` unless you want all descendant consumers to force re-render. See the "Note" under the `TrackingProvider` section for more details.
-* Objects used in `eventPayload`, `eventOptions` and `payload` are shallow copied when merging data in the `TrackingProvider`, so changes to referenced objects would be reflected in all usages. Use new objects to avoid this.
+* Objects used in `eventPayload`, `eventOptions` and `payload` are deep merged when merging data in the `TrackingProvider`. Arrays are concatinated (nested objects within arrays are not merged), objects are merged recursively. Attributes with different types will be overwritten. 
 
 ## Development
 

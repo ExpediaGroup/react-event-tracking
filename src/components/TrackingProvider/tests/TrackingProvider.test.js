@@ -408,14 +408,86 @@ describe('<TrackingProvider/>', () => {
         });
 
         it('should trigger an event with merged payload and options', () => {
-            const event = 'datepicker.close';
-            const provider = shallow(<TrackingProvider trigger={triggerSpy} eventPayload={PROP_DATA.eventPayload} eventOptions={PROP_DATA.eventOptions} payload={PROP_DATA.payload} options={PROP_DATA.options}/>).instance();
-            provider.trigger(event, CONTEXT_DATA.payload, CONTEXT_DATA.options);
+            const event = 'pageview';
+            const defaultPayload = {
+                hello: 'world',
+                foo: {
+                    bar: 'one',
+                    bike: 'one'
+                }
+            };
+            const nestedEventPayload = {
+                pageview: {
+                    something: 'new',
+                    foo: {
+                        bar: 'two'
+                    }
+                }
+            };
+
+            const triggerPayload = {
+                hello: 'world2',
+                foo: {
+                    bar: 'three',
+                    car: 'three'
+                }
+            };
+
+            const defaultOptions = {
+                hi: 'there',
+                who: {
+                    are: 'you'
+                }
+            };
+
+            const nestedEventOptions = {
+                pageview: {
+                    hello: 'world',
+                    who: {
+                        am: 'i',
+                        are: 'we'
+                    }
+                }
+            };
+
+            const triggerOptions = {
+                hi: 'you',
+                who: {
+                    are: 'they'
+                }
+            };
+
+            const expectedPayload = {
+                hello: 'world2',
+                something: 'new',
+                foo: {
+                    bar: 'three',
+                    bike: 'one',
+                    car: 'three'
+                }
+            };
+
+            const expectedOptions = {
+                hello: 'world',
+                hi: 'you',
+                who: {
+                    am: 'i',
+                    are: 'they'
+                }
+            };
+
+            const nestedTrackingProvider = React.createRef();
+            mount(
+                <TrackingProvider trigger={triggerSpy} payload={defaultPayload} options={defaultOptions}>
+                    <TrackingProvider ref={nestedTrackingProvider} eventPayload={nestedEventPayload} eventOptions={nestedEventOptions}/>
+                </TrackingProvider>
+            ).instance();
+
+            nestedTrackingProvider.current.trigger(event, triggerPayload, triggerOptions);
             expect(triggerSpy.calledOnce).to.equal(true);
             const args = triggerSpy.args[0];
-            expect(args[0]).to.equal(event);
-            expect(args[1]).to.deep.equal({...PROP_DATA.payload, ...PROP_DATA.eventPayload[event], ...CONTEXT_DATA.payload});
-            expect(args[2]).to.deep.equal({...PROP_DATA.options, ...PROP_DATA.eventOptions[event], ...CONTEXT_DATA.options});
+            expect(args[1]).to.deep.equal(expectedPayload);
+            expect(args[2]).to.deep.equal(expectedOptions);
         });
     });
 

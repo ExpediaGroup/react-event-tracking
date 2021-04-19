@@ -16,6 +16,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import TrackingContext from '../../context/TrackingContext';
+import deepMerge from '../../utils/DeepMerge';
 
 /**
  * A React context provider that allows nesting to generate new context that
@@ -86,24 +87,10 @@ class TrackingProvider extends PureComponent {
             newData.options = options || data.options;
         } else {
             // Not an overwrite so merge the properties and context objects
-            newData.eventPayload = {...data.eventPayload, ...eventPayload};
-            newData.eventOptions = {...data.eventOptions, ...eventOptions};
-            newData.payload = {...data.payload, ...payload};
-            newData.options = {...data.options, ...options};
-
-            // if eventFields, eventPayload or eventOptions was specified need to do a shallow
-            // copy and another shallow copy one level deep for each key.
-
-            if (eventPayload) {
-                Object.keys(newData.eventPayload).forEach((key) => {
-                    newData.eventPayload[key] = {...data.eventPayload[key], ...eventPayload[key]};
-                });
-            }
-            if (eventOptions) {
-                Object.keys(newData.eventOptions).forEach((key) => {
-                    newData.eventOptions[key] = {...data.eventOptions[key], ...eventOptions[key]};
-                });
-            }
+            newData.eventPayload = deepMerge(data.eventPayload, eventPayload);
+            newData.eventOptions = deepMerge(data.eventOptions, eventOptions);
+            newData.payload = deepMerge(data.payload, payload);
+            newData.options = deepMerge(data.options, options);
         }
 
         return newData;
@@ -124,16 +111,8 @@ class TrackingProvider extends PureComponent {
             throw new TypeError('event is a required parameter');
         }
 
-        payload = {
-            ...data.payload,
-            ...eventPayload,
-            ...payload
-        };
-        options = {
-            ...data.options,
-            ...eventOptions,
-            ...options
-        };
+        payload = deepMerge(data.payload, eventPayload, payload);
+        options = deepMerge(data.options, eventOptions, options);
         return data.trigger(name, payload, options);
     };
 
